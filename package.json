@@ -1,0 +1,36 @@
+{
+  "name": "water-tracker",
+  "productName": "喝水追蹤",
+  "version": "1.0.0",
+  "description": "喝水、運動、飲食與久坐提醒追蹤",
+  "main": "main.js",
+  "author": "play",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win portable"
+  },
+  "build": {
+    "appId": "com.play.watertracker",
+    "productName": "喝水追蹤",
+    "files": [
+      "index.html",
+      "style.css",
+      "app.js",
+      "main.js",
+      "server.js"
+    ],
+    "win": {
+      "target": [
+        "portable"
+      ]
+    },
+    "directories": {
+      "output": "dist"
+    }
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  }
+}

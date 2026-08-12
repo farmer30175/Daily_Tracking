@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+  <meta name="theme-color" content="#0ea5e9">
+  <title>喝水追蹤</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="date-group">
+      <button id="prevDay" class="day-arrow" title="前一天">&#10094;</button>
+        <div class="date-info">
+          <div id="dateLabel" class="date-label"></div>
+          <div class="weekday-label" data-i18n="today">今天</div>
+        </div>
+      <button id="nextDay" class="day-arrow" title="後一天">&#10095;</button>
+    </div>
+    <button id="settingsBtn" class="icon-btn settings-btn"><span class="gear">⚙️</span><span data-i18n="settingsTitle">設定</span></button>
+  </header>
+
+  <nav class="tab-bar" id="tabBar">
+    <button class="tab-btn active" data-tab="water" data-i18n="tabWater">水</button>
+    <button class="tab-btn" data-tab="exercise" data-i18n="tabExercise">運動</button>
+    <button class="tab-btn" data-tab="diet" data-i18n="tabDiet">飲食</button>
+    <button class="tab-btn" data-tab="stats" data-i18n="tabStats">統計</button>
+  </nav>
+
+  <main>
+    <div class="tab-panel" id="tab-water">
+      <section class="hero">
+        <div class="glass-wrap">
+          <div class="glass">
+            <div class="water" id="water"></div>
+            <div class="glass-rim"></div>
+          </div>
+          <div class="glass-shadow"></div>
+        </div>
+
+        <div class="hero-stats">
+          <div class="big-amount">
+            <span id="intakeAmount">0</span><span class="unit">ml</span>
+          </div>
+          <div class="goal-text"><span data-i18n="goal">目標</span> <b id="goalText">2000</b> ml</div>
+          <div class="progress-bar">
+            <div class="progress-fill" id="progressFill"></div>
+          </div>
+          <div class="progress-pct" id="progressPct">0%</div>
+          <div class="goal-suggestion" id="goalSuggestion"></div>
+        </div>
+      </section>
+
+      <section class="quick-add">
+        <div class="quick-grid" id="quickGrid"></div>
+      </section>
+
+      <section class="panel actions-panel">
+        <button id="customBtn" class="action-btn secondary" data-i18n="customBtn">自訂容量</button>
+        <button id="undoBtn" class="action-btn secondary" disabled data-i18n="undoBtn">撤銷</button>
+      </section>
+
+      <section class="panel timer-panel">
+        <div class="panel-head">
+          <h2 data-i18n="timerTitle">⏰ 久坐提醒</h2>
+          <span class="day-summary" id="timerHint"></span>
+        </div>
+        <div class="timer-body">
+          <div class="timer-display" id="timerDisplay">50:00</div>
+          <div class="timer-controls">
+            <button id="timerStart" class="action-btn primary" data-i18n="timerStart">開始</button>
+            <button id="timerReset" class="action-btn secondary" data-i18n="timerReset">重設</button>
+          </div>
+          <div class="chip-grid timer-presets" id="timerPresets"></div>
+          <p class="timer-tip" id="timerTip"></p>
+        </div>
+      </section>
+
+      <section class="panel history-panel">
+        <h2 data-i18n="waterChartTitle">近 7 天喝水</h2>
+        <div class="chart" id="chart"></div>
+      </section>
+    </div>
+
+    <div class="tab-panel hidden" id="tab-exercise">
+      <section class="panel sub-panel">
+        <div class="panel-head">
+          <h2 data-i18n="exTitle">🏃 運動</h2>
+          <span class="day-summary" id="exerciseSummary"></span>
+        </div>
+        <div class="rule-status" id="rule333"></div>
+        <div class="chip-grid" id="exerciseChips"></div>
+        <ul class="entry-list" id="exerciseList"></ul>
+      </section>
+
+      <section class="panel history-panel">
+        <h2 data-i18n="kcalChartTitle">近 7 天運動卡路里</h2>
+        <div class="chart chart-kcal" id="chartKcal"></div>
+      </section>
+    </div>
+
+    <div class="tab-panel hidden" id="tab-diet">
+      <section class="panel sub-panel">
+        <div class="panel-head">
+          <h2>&#127869; 飲食</h2>
+          <span class="day-summary" id="mealSummary"></span>
+        </div>
+        <div class="diet-groups" id="dietGroups"></div>
+        <div class="rule-status diet-reminder" id="dietReminder"></div>
+        <div class="chip-grid" id="mealChips"></div>
+        <ul class="entry-list" id="mealList"></ul>
+      </section>
+
+      <section class="panel history-panel">
+        <h2>近 7 天飲食均衡</h2>
+        <div class="chart chart-diet" id="chartDiet"></div>
+        <div class="legend" id="dietLegend"></div>
+      </section>
+    </div>
+
+    <div class="tab-panel hidden" id="tab-stats">
+      <section class="panel sub-panel">
+        <div class="panel-head">
+          <h2 data-i18n="statsTitle">📊 統計報表</h2>
+          <div class="stats-head-actions">
+            <div class="range-toggle" id="statsRange"></div>
+            <div class="range-toggle" id="statsModeToggle"></div>
+          </div>
+        </div>
+        <div class="stat-grid" id="statGrid"></div>
+        <div class="panel-head stat-section-title">
+          <h2 data-i18n="dailyAchieve">逐日達成</h2>
+        </div>
+        <div class="achievement-list" id="achievementList"></div>
+        <div class="calendar-view hidden" id="calendarView"></div>
+      </section>
+    </div>
+  </main>
+
+  <div class="modal-backdrop hidden" id="goalModal">
+    <div class="modal">
+      <h3 data-i18n="goalModalTitle">設定與衛福部建議</h3>
+      <label class="modal-label" for="goalInput" data-i18n="goalLabel">每日目標 (ml)</label>
+      <input type="number" id="goalInput" min="100" max="10000" step="100">
+      <label class="modal-label" for="weightInput" data-i18n="weightLabel">體重 (kg)</label>
+      <input type="number" id="weightInput" min="20" max="300" step="0.5" placeholder="輸入後自動顯示建議">
+      <label class="modal-label" data-i18n="language">語言</label>
+      <div class="lang-toggle" id="langToggle"></div>
+      <div class="mohw-note">
+        <div class="mohw-note-title" data-i18n="mohwNoteTitle">衛福部建議</div>
+        <p id="weightSuggestion" data-i18n="weightNone">尚未輸入體重</p>
+        <button id="applySuggestionBtn" class="link-btn" disabled data-i18n="applySuggestion">套用建議為每日目標</button>
+        <p class="mohw-ref" data-i18n="mohwRef">成人每天至少 1,500 ml 開水(約 6-8 杯,每杯 240ml),可依體重、活動量與天氣增減。慢性疾病患者請諮詢醫師。</p>
+      </div>
+      <div class="modal-actions">
+        <button class="action-btn secondary" data-close="goalModal" data-i18n="cancel">取消</button>
+        <button class="action-btn primary" id="saveGoalBtn" data-i18n="save">儲存</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="customModal">
+    <div class="modal">
+      <h3 data-i18n="customTitle">自訂杯量</h3>
+      <input type="number" id="customInput" min="10" max="5000" step="10">
+      <div class="modal-actions">
+        <button class="action-btn secondary" data-close="customModal" data-i18n="cancel">取消</button>
+        <button class="action-btn primary" id="saveCustomBtn" data-i18n="customAdd">加入</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="exerciseModal">
+    <div class="modal">
+      <h3 data-i18n="addExTitle">新增運動</h3>
+      <label class="modal-label" for="exerciseTypeInput" data-i18n="exTypeLabel">運動類型</label>
+      <input type="text" id="exerciseTypeInput" placeholder="例如:跑步">
+      <label class="modal-label" for="exerciseMinInput" data-i18n="exMinInputLabel">時間 (分鐘)</label>
+      <input type="number" id="exerciseMinInput" min="1" max="600" value="30">
+      <div class="modal-actions">
+        <button class="action-btn secondary" data-close="exerciseModal" data-i18n="cancel">取消</button>
+        <button class="action-btn primary" id="saveExerciseBtn" data-i18n="saveBtn">紀錄</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="mealModal">
+    <div class="modal">
+      <h3 data-i18n="addMealTitle">記錄飲食</h3>
+      <label class="modal-label" data-i18n="mealLabelLabel">分類</label>
+      <div class="chip-grid" id="mealLabelChips"></div>
+      <label class="modal-label" for="mealNoteInput" data-i18n="mealNoteLabel">內容</label>
+      <input type="text" id="mealNoteInput" placeholder="吃了什麼?(可留空)">
+      <label class="modal-label" data-i18n="mealGroupLabel">食物類別 (多選,用於均衡檢核)</label>
+      <div class="chip-grid" id="mealGroupChips"></div>
+      <input type="text" id="mealOtherInput" placeholder="其他:自行輸入吃了什麼" class="hidden">
+      <div class="modal-actions">
+        <button class="action-btn secondary" data-close="mealModal" data-i18n="cancel">取消</button>
+        <button class="action-btn primary" id="saveMealBtn" data-i18n="saveBtn">紀錄</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop hidden" id="alarmModal">
+    <div class="modal alarm-modal">
+      <h3 data-i18n="alarmTitle">⏰ 該起來走走了!</h3>
+      <p class="alarm-msg" data-i18n="alarmMsg">坐了好一陣子了,起身活動 5-10 分鐘,倒杯水、伸個懶腰、看看遠方吧!</p>
+      <div class="modal-actions alarm-actions">
+        <button class="action-btn secondary" id="alarmSnooze" data-i18n="snooze5">稍後 5 分</button>
+        <button class="action-btn primary" id="alarmRestart" data-i18n="restart">重新開始</button>
+        <button class="action-btn secondary" id="alarmStop" data-i18n="stop">停止</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="app.js"></script>
+</body>
+</html>

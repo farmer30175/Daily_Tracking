@@ -1,0 +1,18 @@
+# dependencies
+node_modules/
+
+# build output (includes portable exe)
+dist/
+build/
+
+# executables
+*.exe
+*.dll
+
+# logs
+*.log
+npm-debug.log*
+
+# os
+.DS_Store
+Thumbs.db
