@@ -20,16 +20,20 @@ npm start          # 以 Electron 啟動開發版
 ## 打包成 EXE
 
 ```bash
-npm run dist
+npm run dist        # 依目前作業系統自動打包（Windows→exe、macOS→dmg/zip）
+npm run dist:win    # 強制打包 Windows portable exe
+npm run dist:mac    # 在 macOS 上打包 dmg/zip（須在 Mac 執行）
 ```
 
-產出單一 portable 執行檔：
+Windows 產出單一 portable 執行檔：
 
 ```
 dist\喝水追蹤 1.0.0.exe
 ```
 
-免安裝，直接雙擊即可執行。因未做數位簽章，Windows SmartScreen 首次可能提示「未知發行者」，點「更多資訊 → 仍要執行」即可。
+macOS 在 Mac 上執行後產出 `dist\喝水追蹤-1.0.0.dmg` 與 `.zip`。
+
+免安裝，直接雙擊即可執行。因未做數位簽章，Windows SmartScreen 首次可能提示「未知發行者」，點「更多資訊 → 仍要執行」即可；macOS 首次開啟請在 Finder 對 App 按右鍵「打開」。
 
 ### 打包失敗的疑難排解
 
